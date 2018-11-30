@@ -1,0 +1,27 @@
+version: "3"
+services:
+  web:
+    image: rooharrigan/api-testing:part1b
+    ports:
+      - "4000:3000"
+    depends_on:
+      - db
+    environment:
+      MYSQL_USER: root
+      MYSQL_HOST: db
+      MYSQL_PASSWORD: mutiny-root
+      MYSQL_DATABASE: mutiny
+  db:
+    image: mysql
+    ports:
+      - "3200:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_USER: root
+      MYSQL_ROOT_PASSWORD: mutiny-root
+      MYSQL_DATABASE: mutiny
+volumes:
+  db_data:
+

@@ -1,0 +1,28 @@
+{
+    "type": "mysql",
+    "host": "localhost",
+    "port": 3306,
+    "username": "root",
+    "password": "root",
+    "database": "mutiny",
+    "synchronize": true,
+    "migrationsRun": false,
+    "logging": false,
+    "entities": [
+       "src/entities/*.js",
+       "dist/entities/**/*.js"
+    ],
+    "migrations": [
+      "src/migrations/*.js",
+      "dist/migrations/**/*.js"
+    ],
+    "subscribers": [
+      "src/subscribers/*.js",
+      "dist/subscribers/**/*.js"
+    ],
+    "cli": {
+       "entitiesDir": "src/entity",
+       "migrationsDir": "src/migration",
+       "subscribersDir": "src/subscriber"
+    }
+ }
