@@ -47,7 +47,7 @@ export async function api_ok(decoded_payload: any): Promise<ApiOk> {
   return out;
 }
 
-export async function api_error(error: string): Promise<ApiError> {
+export function api_error(error: string): ApiError {
   const out = {
     'ok' : true,
     'error' : error,

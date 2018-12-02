@@ -1,6 +1,6 @@
 const uuidValidator = require('uuid-validate');
 import { VError } from "verror";
-import { VisitorToken, TrackEventType } from '../types/types_logic';
+import { VisitorToken, TrackEventType, TrackEventTypes } from '../types/types_logic';
 
 /*
 * business logic
@@ -15,7 +15,7 @@ export function greetVisitor(visitor: string): string {
     return greeting;
 }
 
-export function validate_token(token: string): VisitorToken {
+export async function validate_token(token: string): Promise<VisitorToken> {
     const valid = uuidValidator(token);
     if (!valid) {
         throw new VError (
@@ -24,16 +24,16 @@ export function validate_token(token: string): VisitorToken {
         );
     }
 
-    if (valid) return token as VisitorToken;
+    return token as VisitorToken;
 }
 
-export function validate_event_type(event_type: string): TrackEventType {
-    if (event_type in TrackEventType){
+export async function validate_event_type(event_type: string): Promise<TrackEventType> {
+    if (event_type in TrackEventTypes){
         return event_type as TrackEventType;
-    } else {
-        throw new VError (
-            { info: { event_type: event_type } },
-            "invalid_event_type"
-        );
     }
+
+    throw new VError (
+        { info: { event_type: event_type } },
+        "invalid_event_type"
+    );
 }

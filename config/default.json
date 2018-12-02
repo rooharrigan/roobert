@@ -1,9 +1,0 @@
-{
-    "db": {
-      "host": "localhost",
-      "user": "root",
-      "password": "mutiny-root",
-      "database": "mutiny",
-      "port": 3306
-    }
-  }

@@ -8,7 +8,9 @@ export enum ImpressionType {
     personalized = 'personalized'
 }
 
-export enum TrackEventType {
+export type TrackEventType = string;
+
+export enum TrackEventTypes {
     page_view = 'page_view',
     user = 'user'
 }

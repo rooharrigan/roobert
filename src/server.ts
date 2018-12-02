@@ -3,13 +3,14 @@ import * as Router from 'koa-router';
 import * as Logger from 'koa-logger';
 import { greetVisitor } from './lib/lib_validate';
 import { validate_token, validate_event_type } from './lib/lib_validate';
-import { ApiTrackInputs, TrackEventType, TrackEventPageViewPayload, TrackEventUserPayload } from './types/types_logic';
-import { page_views_main } from './lib/lib_page_views';
-import { createConnection, Connection } from "typeorm";
+import { ApiTrackInputs, TrackEventTypes, TrackEventPageViewPayload, TrackEventUserPayload } from './types/types_logic';
+// import { page_views_main } from './lib/lib_page_views';
+import { createConnection, Connection, AdvancedConsoleLogger } from "typeorm";
 import 'reflect-metadata';
 import * as config from 'config';
+import { VError } from "verror";
+import { api_error } from './lib/lib_api';
 
-const env = require('dotenv').config;
 
 
 /*
@@ -29,49 +30,64 @@ if (process.env.NODE_ENV == "development") {
 }
 
 /*
-* API routing logic
+* Test endpoint to show the app is up and running
 */
 router.get('/', async (ctx, next) => {
-    console.log(config.get("db.host"));
+    try {
+        let visitor = "Roo!";
+        ctx.body = greetVisitor(visitor);
 
-    let visitor = "Roo!";
-    ctx.body = greetVisitor(visitor);
+        let db = await createConnection();
 
+        console.log(db);
 
-    let db = await createConnection();
-
-    console.log(db);
-
-    console.log(config.get("db.host"));
-    console.log(config.get("db.port"));
-
+    } catch (err) {
+        console.log(err);
+    }
 });
 
+
+/*
+* Receive two event types and store them in a database
+*/
 router.post('/track', koaBody(),
     async (ctx) => {
         ctx.body = "You made it to track";
 
         const parsed_params = ctx.request.body as ApiTrackInputs;
 
-        const visitor_token = parsed_params.visitor_token;
-        let token = validate_token(visitor_token);
+        // Validate token is UUID
+        let visitor_token = parsed_params.visitor_token;
+        try {
+            visitor_token = await validate_token(visitor_token);
+        } catch (err) {
+            console.log(err.message);
+            return ctx.throw(400, err.message);
+        }
 
+        // Validate event type is one of two allowed
         let event_type = parsed_params.event_type;
-        event_type = validate_event_type(event_type);
+        try {
+            event_type = await validate_event_type(event_type);
+        } catch (err) {
+            console.log(err.message);
+            return ctx.throw(400, err.message);
+        }
 
         // Type things nicely
         switch (event_type) {
-            case TrackEventType.page_view: {
+            case TrackEventTypes.page_view: {
                 console.log('you are in track page_view');
 
                 const parsed_payload = JSON.parse(parsed_params.payload) as TrackEventPageViewPayload;
                 
-                let ret = page_views_main(visitor_token, parsed_payload);
-                console.log(parsed_payload);
+                // let ret = page_views_main(visitor_token, parsed_payload);
+                // console.log(parsed_payload);
                 break;
             }
 
-            case TrackEventType.user: {
+            case TrackEventTypes.user: {
+                console.log('you are in track user_event');
                 const parsed_payload = JSON.parse(parsed_params.payload) as TrackEventUserPayload;
                 break;
             }
@@ -89,14 +105,6 @@ router.post('/track', koaBody(),
     }
 );
 
-router.get('/reports/pages', async (ctx, next) => {
-    ctx.body = "you made it to pages";
-});
-
-router.get('/reports/visitors', async (ctx, next) => {
-    ctx.body = "you made it to visitors";
-
-});
 
 const port = 3000;
 const server = app.listen(port);
