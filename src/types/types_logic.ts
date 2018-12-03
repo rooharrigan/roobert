@@ -1,26 +1,12 @@
-export interface ApiTrackInputs {
-    visitor_token: VisitorToken;
-    event_type: TrackEventType;
-    payload: string;
-}
+/*
+* All IDs coming from the database should have a type of row_id
+*/
+export type RowId = number;
+
+
 
 export enum ImpressionType {
     personalized = 'personalized'
-}
-
-export type TrackEventType = string;
-
-export enum TrackEventTypes {
-    page_view = 'page_view',
-    user = 'user'
-}
-
-export enum TrackEventUserEventType {
-    conversion = 'conversion',
-}
-
-export interface TrackEventPayload {
-    impression_token: string;
 }
 
 export enum ReportType {
@@ -29,25 +15,9 @@ export enum ReportType {
 }
 
 /*
-* Sub-types of TrackEventPayoad type
-*/
-export interface TrackEventPageViewPayload {
-    url: string;
-    impression_token: string;
-    session_token: string;
-    impression_type: string;
-}
-
-export interface TrackEventUserPayload {
-    impression_token: string;
-    event_name: TrackEventUserEventType;
-}
-
-/*
 * Use an opaque type here to ensure all tokens are UUID-verified
 */
-export type VisitorToken = string;
-
+export type Token = string;
 export enum TokenTypes {
     visitor_token = 'visitor_token',
     user_token = 'user_token',

@@ -10,11 +10,9 @@ ToDo: Literally everything.
 git clone this repo and CD into it
 install ngrok and run `ngrok http 3000`
 run `npm start`
-check out the app running on `localhost:3000`
-postman to `ngrok.whatever.io/track` with appropriate params (get the link from ngrok) to see the post routes
+Verify the app running on `localhost:3000`
+postman to `ngrok.whatever.io/routes` with appropriate params to see the post routes
 
-# Docker stuff you probably want
-1. Pull the 5.5 image onto your local machine (mysql5.5)
-`docker pull mysql/mysql-server:5.5`
-2. Deploy the container with user/password:
-`docker run --name=mutiny -u root -e MYSQL_ROOT_PASSWORD=root -d mysql/mysql-server:5.5`
+# Feedback on this challenge
+1. The names of the page_view events are inconsistent (one has the noun `event`, and one only has the descriptor of the noun). Recommendation, remove the noun in both cases.
+2. The first example request body for the track API is in the shape of a page_view event, but is missing the required key `elapsed_time_in_ms`.
