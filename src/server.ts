@@ -9,6 +9,26 @@ import { createConnection, Connection } from "typeorm";
 import 'reflect-metadata';
 import * as config from 'config';
 
+
+
+const fs = require('fs');
+const path = require('path');
+const https = require('https');
+const certFile = path.resolve(__dirname, 'ssl/ca.crt');
+
+const agentOptions = {
+  ca: fs.readFileSync(certFile)
+};
+const agent = new https.Agent(agentOptions);
+
+// const { WebClient } = require('@slack/client');
+// let web = new WebClient(config.slack.bot_token, {
+// 	slackApiUrl: 'https://dev735.slack.com/api/',
+// 	agent: agent
+// });
+
+
+
 const env = require('dotenv').config;
 
 
