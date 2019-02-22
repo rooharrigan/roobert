@@ -6,4 +6,4 @@ out
 .env
 .vscode
 /dist
-development.json
+/config
