@@ -1,0 +1,9 @@
+{
+        "app": {
+                "client_id": "",
+                "client_secret": "",
+                "slack_access_token": "",
+                "slack_bot_token": ""
+        
+        }
+}
